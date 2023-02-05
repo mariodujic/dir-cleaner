@@ -88,10 +88,11 @@ fn clear_folder_duplicates(path: &String) -> bool {
             let next_file = dir_files.get(index + 1).unwrap();
             if file.name == next_file.name && file.size == next_file.size {
                 
-                let file_content = read(&file.path).unwrap();
-                let next_file_content = read(&next_file.path).unwrap();
+                let file_content = read(&file.path);
+                let next_file_content = read(&next_file.path);
+                let files_read = file_content.is_ok() && next_file_content.is_ok();
 
-                if file_content == next_file_content {
+                if files_read && file_content.unwrap() == next_file_content.unwrap() {
                     println!("{:?}\n", &next_file);
                     cleared_items += 1;
                     remove_file(&next_file.path).unwrap();
