@@ -4,9 +4,13 @@ use std::{
     fs::{read, remove_file},
     ops::Add,
 };
+use std::cmp::Ordering;
+use std::fs::{create_dir, remove_dir_all};
+use std::io::Write;
+use std::path::Path;
 
 use dialoguer::Confirm;
-use std::cmp::Ordering;
+use dialoguer::console::TermFamily::File;
 use walkdir::WalkDir;
 
 #[derive(Eq, PartialEq)]
@@ -87,7 +91,6 @@ fn clear_folder_duplicates(path: &String) -> bool {
         if index < max_index {
             let next_file = dir_files.get(index + 1).unwrap();
             if file.name == next_file.name && file.size == next_file.size {
-                
                 let file_content = read(&file.path);
                 let next_file_content = read(&next_file.path);
                 let files_read = file_content.is_ok() && next_file_content.is_ok();
@@ -102,3 +105,6 @@ fn clear_folder_duplicates(path: &String) -> bool {
     }
     cleared_items != 0
 }
+
+#[cfg(test)]
+mod test;
